@@ -85,7 +85,8 @@ ynh_app_setting_set $app port $port
 # INSTALL PLEX
 #==============================================
 
-apt install plexmediaserver
+wget --no-verbose https://downloads.plex.tv/plex-media-server/1.14.1.5488-cc260c476/plexmediaserver_1.14.1.5488-cc260c476_amd64.deb
+dpkg --install plexmediaserver_1.14.1.5488-cc260c476_amd64.deb
 
 #=================================================
 # NGINX CONFIGURATION
