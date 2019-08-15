@@ -79,14 +79,22 @@ ynh_app_setting_set $app is_public $is_public
 port=$(ynh_find_port 32400)
 # Open this port
 yunohost firewall allow --no-upnp TCP $port 2>&1
+yunohost firewall allow --no-upnp UDP $port 2>&1
 ynh_app_setting_set $app port $port
+
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+
+ynh_app_setting_set $app final_path $final_path
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source "$final_path"
 
 #==============================================
 # INSTALL PLEX
 #==============================================
 
-wget --no-verbose https://downloads.plex.tv/plex-media-server/1.14.1.5488-cc260c476/plexmediaserver_1.14.1.5488-cc260c476_amd64.deb
-dpkg --install plexmediaserver_1.14.1.5488-cc260c476_amd64.deb
+dpkg --install $final_path/plexmediaserver*
 
 #=================================================
 # NGINX CONFIGURATION
@@ -147,4 +155,4 @@ if [ $is_public -eq 1 ]; then
 fi
 
 # Reload services
-systemctl restart nginx
+systemctl reload nginx
